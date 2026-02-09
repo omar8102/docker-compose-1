@@ -11,5 +11,5 @@ server.listen(port, () => {
 
     console.log(`Servidor corriendo en http://localhost:${port}/`);
 
-    console.log("¡Hola desde ACTION 6 Run contenedor de Node.js vamos! 🚀");
+    console.log("¡Hola desde ACTION 7 Run contenedor de Node.js vamos! 🚀");
 });
