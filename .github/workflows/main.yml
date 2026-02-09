@@ -16,6 +16,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          allow-no-subscriptions: true
 
       # 2. Login específico en tu registro de Azure
       - name: ACR Login
