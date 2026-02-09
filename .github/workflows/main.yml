@@ -1,31 +1,36 @@
-name: Build and Push to ACR
+name: Build and Push to Exitus Registry
 
 on:
   push:
-    branches: [ main, master ] # Se activa con cualquier cambio en estas ramas
+    branches: [ main, master ] # Se activa al unir tus ramas o hacer push directo
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Versión actualizada para mayor estabilidad
 
-      # 1. Login en Azure usando tu Service Principal
-      - name: Azure Login
-        uses: azure/login@v1
+      # 1. Login en Azure
+      # Usamos v2 para corregir el error de "Subscription doesn't exist"
+      - name: Azure login
+        uses: azure/login@v2 
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          allow-no-subscriptions: true
 
-      # 2. Login específico en tu registro de Azure
-      - name: ACR Login
+      # 2. Login específico en tu ACR
+      - name: ACR login
         run: |
           az acr login --name exitusregistry
 
-      # 3. Construir y subir la imagen de Node.js
+      # 3. Construir y subir la imagen
+      # Es vital usar el nombre del servidor: exitusregistry.azurecr.io
       - name: Build and Push Image
         run: |
-          # Usamos el nombre de tu servidor: exitusregistry.azurecr.io
+          # Construimos la imagen con el tag 'latest' y el SHA del commit para trazabilidad
+          docker build . -t exitusregistry.azurecr.io/mi-app-node:latest
           docker build . -t exitusregistry.azurecr.io/mi-app-node:${{ github.sha }}
+          
+          # Subimos ambas etiquetas al registro
+          docker push exitusregistry.azurecr.io/mi-app-node:latest
           docker push exitusregistry.azurecr.io/mi-app-node:${{ github.sha }}
