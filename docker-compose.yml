@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   # Nuestro servidor de Node.js
-  app-node:
+  exitus/app-node:
     build: .
-    container_name: exitus/mi-app-node
+    container_name: mi-app-node
     # No exponemos puertos al en s exterior aquí, solo Nginx lo hará
 
     # Nuestro servidor Nginx
